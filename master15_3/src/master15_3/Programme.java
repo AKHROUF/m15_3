@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javafx.util.Pair;
 
 public class Programme {
 
@@ -68,6 +69,20 @@ public class Programme {
 		groupes2.get(false).forEach(e-> System.out.println("\t"+ e.getNom()));
 		System.out.println("Les hommes :");
 		groupes2.get(true).forEach(e-> System.out.println("\t"+ e.getNom()));
+		System.out.println("---------------------");
+		
+		List<Pair<Employe,Departement>> jointure = 
+				societe.stream().flatMap(e-> depts.stream()
+						.filter(d-> d.getId() == e.getIdDepartement()) // jointure au lieu du produit cartésien
+				.map(d-> new Pair<Employe,Departement>(e,d)))
+				//.filter(x->x.getKey().getIdDepartement() == x.getValue().getId())
+				.collect(Collectors.toList());
+		
+		jointure.forEach(x-> System.out.println(
+				x.getKey().getNom()+ " " + 
+				x.getValue().getIntitule()));
+		
+		
 	}
 
 }
